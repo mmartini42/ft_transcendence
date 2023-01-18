@@ -28,7 +28,7 @@ services:
     depends_on:
      - postgres-TRANS
 
-    frontend:
+  frontend:
     container_name: trans-front
     build:
       context: ./frontend/
