@@ -1,0 +1,43 @@
+services:
+  # Databases
+  postgres-TRANS:
+    image: postgres
+    container_name: trans-db
+    hostname: TRANS
+    environment:
+     - POSTGRES_USER=${POSTGRES_TRANS_USER}
+     - POSTGRES_PASSWORD=${POSTGRES_TRANS_PASSWORD}
+    ports:
+      - ${POSTGRES_TRANS_PORT}:5432
+    volumes:
+      - ./postgres/TRANS:/var/lib/postgresql/data
+      - ./Needed:/docker-entrypoint-initdb.d
+    restart: unless-stopped
+
+  backend:
+    container_name: trans-back
+    build:
+      context: ./backend/
+      dockerfile: Dockerfile
+    env_file:
+      - './.env'
+    ports:
+      - '${BACKEND_PORT}:3001'
+    volumes:
+      - ./backend/src:/app/src
+    depends_on:
+     - postgres-TRANS
+
+    frontend:
+    container_name: trans-front
+    build:
+      context: ./frontend/
+      dockerfile: Dockerfile
+    env_file:
+      - './.env'
+    ports:
+      - '80:80'
+    volumes:
+      - ./frontend/src:/app/src
+    depends_on:
+     - postgres-TRANS
