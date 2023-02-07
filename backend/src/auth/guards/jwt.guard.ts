@@ -1,1 +1,5 @@
-export const jwtConst = "!1B8IE$In57zvJ136lv8ZhESZK"
+import { Injectable } from "@nestjs/common";
+import { AuthGuard } from '@nestjs/passport';
+
+@Injectable()
+export class JwtAuthGuard extends AuthGuard('jwt') {}
